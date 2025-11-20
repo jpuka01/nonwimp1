@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemeMatcher - Feasibility Test</title>
+    <link rel="stylesheet" href="test_style.css">
+    <!-- Load face-api.js from CDN -->
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script defer src="test_script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>MemeMatcher Feasibility Test</h1>
+        <p class="subtitle">Testing face-api.js emotion detection capabilities</p>
+        
+        <!-- Status Messages -->
+        <div id="status" class="status">Initializing...</div>
+        
+        <!-- Video Feed Container -->
+        <div class="video-container">
+            <video id="video" autoplay muted playsinline></video>
+            <canvas id="overlay"></canvas>
+        </div>
+        
+        <!-- Emotion Display -->
+        <div class="emotion-display">
+            <h2>Detected Emotion</h2>
+            <div id="dominant-emotion" class="dominant-emotion">--</div>
+            <div id="confidence" class="confidence">Confidence: --</div>
+        </div>
+        
+        <!-- Detailed Emotion Scores -->
+        <div class="emotion-scores">
+            <h3>All Emotion Scores:</h3>
+            <div id="emotion-list" class="emotion-list">
+                <div class="emotion-item">
+                    <span class="emotion-name">Happy:</span>
+                    <span class="emotion-value" id="happy-score">--</span>
+                </div>
+                <div class="emotion-item">
+                    <span class="emotion-name">Sad:</span>
+                    <span class="emotion-value" id="sad-score">--</span>
+                </div>
+                <div class="emotion-item">
+                    <span class="emotion-name">Angry:</span>
+                    <span class="emotion-value" id="angry-score">--</span>
+                </div>
+                <div class="emotion-item">
+                    <span class="emotion-name">Surprised:</span>
+                    <span class="emotion-value" id="surprised-score">--</span>
+                </div>
+                <div class="emotion-item">
+                    <span class="emotion-name">Neutral:</span>
+                    <span class="emotion-value" id="neutral-score">--</span>
+                </div>
+                <div class="emotion-item">
+                    <span class="emotion-name">Fearful:</span>
+                    <span class="emotion-value" id="fearful-score">--</span>
+                </div>
+                <div class="emotion-item">
+                    <span class="emotion-name">Disgusted:</span>
+                    <span class="emotion-value" id="disgusted-score">--</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Test Info -->
+        <div class="test-info">
+            <h3>Feasibility Test Validation:</h3>
+            <ul>
+                <li id="check-models">✓ Loading face-api.js models...</li>
+                <li id="check-webcam">✓ Accessing webcam...</li>
+                <li id="check-detection">✓ Running face detection...</li>
+                <li id="check-emotions">✓ Extracting emotions...</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
