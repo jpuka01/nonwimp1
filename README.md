@@ -60,6 +60,10 @@ functions, and emotions are extracted.
 **Process:** Load models from CDN -> request webcam -> display video -> 
 detect face every 300ms -> show emotions with confidence
 
+### Results
+
+Our test code worked as expected.
+
 
 ### Next Steps
 Curate memes (5-6 per emotion), implement display logic, add "Get New Meme" 
