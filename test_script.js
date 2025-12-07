@@ -7,8 +7,91 @@ const statusDiv = document.getElementById('status');
 const dominantEmotionDiv = document.getElementById('dominant-emotion');
 const confidenceDiv = document.getElementById('confidence');
 
+// New: Meme UI elements
+const memeImage = document.getElementById('meme-image');
+const newMemeButton = document.getElementById('new-meme-btn');
+const memeHint = document.getElementById('meme-hint');
+
 let modelsLoaded = false;
 let detectionActive = false;
+
+// --- Meme storage and management (your part) ---
+
+// One meme per emotion for now; paths assume images are in same folder as HTML.
+// You or your partner can add more filenames to each array later.
+const MEME_STORAGE = {
+    happy: ['memes/happy.jpg'],
+    sad: ['memes/sad.jpg'],
+    angry: ['memes/angry.jpg'],
+    surprised: ['memes/surprised.jpg'],
+    neutral: ['memes/neutral.jpg']
+};
+
+// Map raw face-api emotions to our categories
+const EMOTION_CATEGORY_MAP = {
+    happy: 'happy',
+    sad: 'sad',
+    angry: 'angry',
+    disgusted: 'angry', // treat disgusted as angry
+    fearful: 'sad',     // treat fearful as sad
+    surprised: 'surprised',
+    neutral: 'neutral'
+};
+
+// Track which meme index we are currently showing per emotion category
+const memeIndexByEmotion = {};
+let currentEmotionCategory = 'neutral';
+
+// Normalize raw emotion string from face-api to one of our categories
+function normalizeEmotion(rawEmotion) {
+    if (!rawEmotion) return 'neutral';
+    const lower = rawEmotion.toLowerCase();
+    return EMOTION_CATEGORY_MAP[lower] || 'neutral';
+}
+
+// Get the list of memes for a given emotion category
+function getMemeListForEmotion(category) {
+    return MEME_STORAGE[category] || MEME_STORAGE['neutral'];
+}
+
+// Get the current meme for an emotion category (without advancing index)
+function getCurrentMemeForEmotion(category) {
+    const list = getMemeListForEmotion(category);
+    if (!list || list.length === 0) return null;
+    const index = memeIndexByEmotion[category] ?? 0;
+    return list[index];
+}
+
+// Get the next meme for an emotion category (advances index, wraps around)
+function getNextMemeForEmotion(category) {
+    const list = getMemeListForEmotion(category);
+    if (!list || list.length === 0) return null;
+
+    const currentIndex = memeIndexByEmotion[category] ?? 0;
+    const nextIndex = (currentIndex + 1) % list.length;
+    memeIndexByEmotion[category] = nextIndex;
+    return list[nextIndex];
+}
+
+// Display a meme for the given emotion category
+// If useNext is true, cycle to next meme; otherwise keep current index.
+function showMemeForEmotion(category, useNext = false) {
+    const src = useNext
+        ? getNextMemeForEmotion(category)
+        : getCurrentMemeForEmotion(category);
+
+    if (!src) {
+        memeImage.style.display = 'none';
+        memeHint.textContent = 'No meme available for this emotion.';
+        return;
+    }
+
+    memeImage.src = src;
+    memeImage.alt = `${category} meme`;
+    memeImage.style.display = 'block';
+    memeHint.textContent =
+        'Meme updates based on your dominant emotion. Click “Get New Meme” to cycle.';
+}
 
 // Update status message
 function updateStatus(message, type = 'loading') {
@@ -138,6 +221,15 @@ async function detectEmotions() {
             const dominantItem = document.getElementById(`${dominantEmotion}-score`).parentElement;
             dominantItem.style.borderLeftColor = '#764ba2';
             dominantItem.style.backgroundColor = '#667eea20';
+
+            // --- Meme matching logic ---
+            const normalized = normalizeEmotion(dominantEmotion);
+            if (normalized !== currentEmotionCategory) {
+                // When emotion category changes, reset index and show meme for that emotion
+                currentEmotionCategory = normalized;
+                memeIndexByEmotion[currentEmotionCategory] = 0;
+                showMemeForEmotion(currentEmotionCategory, false);
+            }
             
         } else {
             if (detectionActive) {
@@ -158,6 +250,9 @@ async function detectEmotions() {
 async function init() {
     console.log('Initializing MemeMatcher Feasibility Test...');
     
+    // Initial neutral meme so UI is not empty
+    showMemeForEmotion(currentEmotionCategory, false);
+
     // Load models
     const modelsSuccess = await loadModels();
     if (!modelsSuccess) return;
@@ -186,6 +281,13 @@ window.addEventListener('load', () => {
         updateStatus('Error: Your browser does not support webcam access', 'error');
         updateCheck('check-webcam', false);
         return;
+    }
+
+    // Hook up "Get New Meme" button
+    if (newMemeButton) {
+        newMemeButton.addEventListener('click', () => {
+            showMemeForEmotion(currentEmotionCategory, true);
+        });
     }
     
     init();

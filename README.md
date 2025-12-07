@@ -2,7 +2,6 @@
 John Puka & Ismail Qadiri
 November 19, 2025
 
-
 ## 1. PROJECT SKETCH
 
 ### Goal
@@ -23,52 +22,48 @@ memes in real-time.
 ## 2. TECHNOLOGY REQUIREMENTS / TECHNICAL RISKS
 
 ### Tech Stack
-- **face-api.js** - Browser-based emotion detection (TensorFlow.js)
-- **HTML5 getUserMedia** - Webcam access
-- **JavaScript (ES6+)** - Application logic
-- **CSS3** - Styling
-- **Meme collection** - Images by emotion category
+- face-api.js - Browser-based emotion detection (TensorFlow.js)
+- HTML5 getUserMedia - Webcam access
+- JavaScript (ES6+) - Application logic
+- CSS3 - Styling
+- Meme collection - Images by emotion category
 
 ### Risks & Mitigation
 
 **HIGH:**
-1. **Emotion accuracy** - Confused/neutral overlap -> Reduce to 5 emotions if 
+1. Emotion accuracy - Confused/neutral overlap -> Reduce to 5 emotions if 
 needed
 2. **Load time** - 6-8MB, 5-10 sec -> Loading indicator + browser cache
 
 **MEDIUM:**
-3. **Webcam permissions** - May be denied -> Clear prompts, error handling
-4. **Browser compatibility** - Old browsers unsupported -> 
+3. Webcam permissions - May be denied -> Clear prompts, error handling
+4. Browser compatibility - Old browsers unsupported -> 
 Require Chrome/Firefox/Edge
-5. **Lighting** - Affects accuracy -> User feedback, manual selection option
-6. **Performance** - May lag -> Reduce to 2-3 FPS detection rate
+5. Lighting - Affects accuracy -> User feedback, manual selection option
+6. Performance - May lag -> Reduce to 2-3 FPS detection rate
 
 **LOW:**
-7. **HTTPS requirement** - Localhost works for dev
-8. **Meme sourcing** - Doesn't affect core functionality
+7. HTTPS requirement - Localhost works for dev
+8. Meme sourcing - Doesn't affect core functionality
 
 
 ## 3. TECHNOLOGY FEASIBILITY TEST
 
 ### Goal
-We will need to validate the face-api.js loads, webcam works, face detection 
-functions, and emotions are extracted.
+We will need to validate the face-api.js loads, webcam works, face detection functions, and emotions are extracted.
 
 ### Implementation
-**Files:** feasibility_test.html, test_style.css, test_script.js
+Files: feasibility_test.html, test_style.css, test_script.js
 
-**Process:** Load models from CDN -> request webcam -> display video -> 
+Process: Load models from CDN -> request webcam -> display video -> 
 detect face every 300ms -> show emotions with confidence
 
 ### Results
 
-Our test code worked as expected.
-
+Our test code worked peRfectly like we expected
 
 ### Next Steps
-Curate memes (5-6 per emotion), implement display logic, add "Get New Meme" 
-button, UI polish
-
+fix up memes (5-6 per emotion), implement display logic, add "Get New Meme" button, UI polish
 
 ## APPENDIX
 
@@ -81,16 +76,16 @@ Open `feasibility_test.html` with Live Server (requires HTTPS/localhost)
 
 ### Design Documentation
 
-**Inheritance:** None in feasibility test (functional JS). 
+Inheritance: None in feasibility test (functional JS). 
 Full app: EmotionDetector -> FaceAPIDetector; MemeManager
 
-**Aggregation:** MemeMatcher -> VideoStream, EmotionDetector, MemeDatabase, 
+Aggregation: MemeMatcher -> VideoStream, EmotionDetector, MemeDatabase, 
 UIController
 
-**Collaboration:** UIController uses EmotionDetector + MemeDatabase; 
+Collaboration: UIController uses EmotionDetector + MemeDatabase; 
 EmotionDetector uses VideoStream
 
-**Information Hiding:**  
+Information Hiding:* 
 - EmotionDetector: model loading, tensors, confidence  
 - MemeDatabase: file paths, selection algorithm  
 - VideoStream: getUserMedia details  
