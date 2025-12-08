@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MemeMatcher - Feasibility Test</title>
-    <link rel="stylesheet" href="test_style.css">
+    <link rel="stylesheet" href="style.css">
     <!-- Load face-api.js from CDN -->
     <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
-    <script defer src="test_script.js"></script>
+    <script defer src="script.js"></script>
 </head>
 <body>
     <div class="container">
@@ -68,25 +68,19 @@
         <!-- Matched Meme Display -->
         <div class="meme-section">
             <h2>Matched Meme</h2>
-            <p id="meme-hint" class="meme-hint">
-                Meme updates based on your dominant emotion. Click “Get New Meme” to cycle.
-            </p>
             <div class="meme-display">
                 <img id="meme-image" alt="Matched meme will appear here">
             </div>
-            <button id="new-meme-btn" type="button" class="primary-button">
-                Get New Meme
-            </button>
         </div>
         
         <!-- Test Info -->
         <div class="test-info">
             <h3>Feasibility Test Validation:</h3>
             <ul>
-                <li id="check-models">✓ Loading face-api.js models...</li>
-                <li id="check-webcam">✓ Accessing webcam...</li>
-                <li id="check-detection">✓ Running face detection...</li>
-                <li id="check-emotions">✓ Extracting emotions...</li>
+                <li id="check-models">Loading face-api.js models...</li>
+                <li id="check-webcam">Accessing webcam...</li>
+                <li id="check-detection">Running face detection...</li>
+                <li id="check-emotions">Extracting emotions...</li>
             </ul>
         </div>
     </div>

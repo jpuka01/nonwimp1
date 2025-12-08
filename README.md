@@ -1,92 +1,76 @@
-# OOP Nonwimp1 Project: MemeMatcher
-John Puka & Ismail Qadiri
-November 19, 2025
+# MemeMatcher - Real-Time Emotion Detection with Meme Matching
+John Puka & Ismail Qadiri  
+CS086 OOP Nonwimp1 Project
 
-## 1. PROJECT SKETCH
+## Project Overview
+MemeMatcher detects facial emotions via webcam and displays matching humorous memes in real-time. The system continuously analyzes facial expressions using machine learning and updates the displayed meme based on the detected emotion category.
 
-### Goal
-MemeMatcher detects facial emotions via webcam and displays matching humorous 
-memes in real-time.
+## Design & Implementation
 
-### Interaction Flow
-1. User accesses a webcam
-2. System analyzes facial expressions continuously  
-3. Detects emotion (Happy, Sad, Angry, Surprised, Neutral, Confused)
-4. Displays matching meme from curated collection
-5. If time, user can request new memes or continue live detection
+### Design Decisions
+We focus on different aspects for the project:
+- face-api.js detects 7 emotions (happy, sad, angry, surprised, neutral, fearful, disgusted), which we mapped to 5 categories for meme matching (treating "fearful" as "sad" and "disgusted" as "angry")
+- Dictionary-based system where each emotion category maps to an array of meme file paths, allowing easy expansion
+- Set to 300ms intervals (~3 FPS) to balance real-time responsiveness with performance
 
-### Wireframe
-![Wireframe](wireframe.png)
+### Main Features Implementation
+1. Model Loading: Asynchronously loads face-api.js TensorFlow models from CDN with progress feedback
+2. Webcam Access: Uses MediaDevices API with permission handling and error recovery
+3. Face Detection: TinyFaceDetector analyzes video frames with visual bounding box overlay
+4. Emotion Extraction: Sorts confidence scores to identify dominant emotion
+5. Meme Matching: Automatically displays memes when emotion category changes; index tracking enables cycling through multiple memes per emotion
 
-
-## 2. TECHNOLOGY REQUIREMENTS / TECHNICAL RISKS
-
-### Tech Stack
-- face-api.js - Browser-based emotion detection (TensorFlow.js)
-- HTML5 getUserMedia - Webcam access
-- JavaScript (ES6+) - Application logic
-- CSS3 - Styling
-- Meme collection - Images by emotion category
-
-### Risks & Mitigation
-
-**HIGH:**
-1. Emotion accuracy - Confused/neutral overlap -> Reduce to 5 emotions if 
-needed
-2. **Load time** - 6-8MB, 5-10 sec -> Loading indicator + browser cache
-
-**MEDIUM:**
-3. Webcam permissions - May be denied -> Clear prompts, error handling
-4. Browser compatibility - Old browsers unsupported -> 
-Require Chrome/Firefox/Edge
-5. Lighting - Affects accuracy -> User feedback, manual selection option
-6. Performance - May lag -> Reduce to 2-3 FPS detection rate
-
-**LOW:**
-7. HTTPS requirement - Localhost works for dev
-8. Meme sourcing - Doesn't affect core functionality
+### Modifications Made
+- Emotion mapping: Originally planned 6 emotions including "confused" but face-api.js provides "fearful/disgusted" instead, so we consolidated to 5 practical categories
+- UI enhancements: Added real-time confidence percentages and color-coded emotion highlighting for better user feedback
+- Performance optimization: Used TinyFaceDetector (lightweight model) instead of SSD MobileNet for faster load times
 
 
-## 3. TECHNOLOGY FEASIBILITY TEST
+## UI Design Highlights
 
-### Goal
-We will need to validate the face-api.js loads, webcam works, face detection functions, and emotions are extracted.
+### Visual Polish
+- Real-time feedback: Live bounding box around detected face, color-coded emotion scores, and status messages keep users informed
+- Clear hierarchy: Webcam feed -> dominant emotion -> all scores -> matched meme creates logical visual flow
 
-### Implementation
-Files: feasibility_test.html, test_style.css, test_script.js
+### User Experience
+- Progress indicators during 5-10 second model loading prevent confusion
+- Prominent display of dominant emotion with confidence percentage builds trust
+- All 7 emotion scores visible simultaneously for transparency
+- Meme automatically updates when emotion changes, maintaining engagement
 
-Process: Load models from CDN -> request webcam -> display video -> 
-detect face every 300ms -> show emotions with confidence
 
-### Results
+## Technical Features & Challenges
 
-Our test code worked peRfectly like we expected
+### Interesting Technical Aspects
+1. Browser-based ML: Runs TensorFlow.js models entirely client-side with no backend required
+2. Canvas overlay system: Transparent canvas layered over video element enables real-time face bounding box without altering video stream
+3. Async initialization chain: Models -> Webcam -> Detection loop ensures proper sequencing with comprehensive error handling
+4. Emotion state management: Tracks current emotion category and meme indices to prevent unnecessary updates and enable cycling
 
-### Next Steps
-fix up memes (5-6 per emotion), implement display logic, add "Get New Meme" button, UI polish
+### Technical Challenges Resolved
+- Load time: 6-8MB models take 5-10 seconds; mitigated with loading indicators and status messages
+- Detection reliability: Implemented checks for video state, model loading, and face presence to prevent crashes
+- Emotion ambiguity: Neutral/fearful overlap resolved by treating ambiguous emotions as "neutral" default
 
-## APPENDIX
 
-### Files
-- `feasibility_test.html`, `test_style.css`, `test_script.js`  
-- Screenshot: [Showing webcam + detected emotion]
+## How to Run
 
-### Run Test
-Open `feasibility_test.html` with Live Server (requires HTTPS/localhost)
+### Requirements
+- Modern browser (Chrome, Firefox, or Edge)
+- Webcam access permission
+- HTTPS connection or localhost environment
 
-### Design Documentation
+### Steps
+1. Open meme_matcher.html in a browser using a local server
+2. Grant webcam permission when prompted
+3. Wait 5-10 seconds for models to load
+4. Position your face in the camera view
+5. Watch as memes update based on your detected emotion
 
-Inheritance: None in feasibility test (functional JS). 
-Full app: EmotionDetector -> FaceAPIDetector; MemeManager
 
-Aggregation: MemeMatcher -> VideoStream, EmotionDetector, MemeDatabase, 
-UIController
-
-Collaboration: UIController uses EmotionDetector + MemeDatabase; 
-EmotionDetector uses VideoStream
-
-Information Hiding:* 
-- EmotionDetector: model loading, tensors, confidence  
-- MemeDatabase: file paths, selection algorithm  
-- VideoStream: getUserMedia details  
-- UIController: DOM manipulation
+## Technology Stack
+- face-api.js - TensorFlow.js-based emotion detection
+- HTML getUserMedia API - Webcam access
+- Canvas API - Face detection overlay
+- JavaScript - Async/await patterns
+- CSS - Gradient backgrounds, flexbox layout

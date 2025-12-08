@@ -15,8 +15,6 @@ const memeHint = document.getElementById('meme-hint');
 let modelsLoaded = false;
 let detectionActive = false;
 
-// --- Meme storage and management (your part) ---
-
 // One meme per emotion for now; paths assume images are in same folder as HTML.
 // You or your partner can add more filenames to each array later.
 const MEME_STORAGE = {
