@@ -1,5 +1,7 @@
 # MemeMatcher - Real-Time Emotion Detection with Meme Matching
-John Puka & Ismail Qadiri  
+John Puka (jpuka01)
+Ismail Qadiri (iqadir01)
+
 CS086 OOP Nonwimp1 Project
 
 ## Project Overview

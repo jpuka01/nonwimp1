@@ -16,7 +16,6 @@ let modelsLoaded = false;
 let detectionActive = false;
 
 // One meme per emotion for now; paths assume images are in same folder as HTML.
-// You or your partner can add more filenames to each array later.
 const MEME_STORAGE = {
     happy: ['memes/happy.jpg'],
     sad: ['memes/sad.jpg'],
